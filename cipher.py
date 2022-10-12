@@ -5,8 +5,8 @@ from IPython import embed
 
 import scheduler
 
-# sorted cipher field
-# FIXME maybe this field isn't sorted ?
+# cipher field
+# FIXME it is currently sorted, maybe it's not ?
 cipher_field = bytes(range(83))
 
 def autokeyer(field, value):

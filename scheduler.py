@@ -25,5 +25,4 @@ def random_shuffled(field, k, index):
 
 # doesn't exhibit shared isomorphs
 def random_sorted(field, k, index):
-    field = sample(field, k)
-    return bytes(field)
+    return bytes(sample(field, k))
