@@ -21,7 +21,7 @@ def get_plaintext_field(plaintexts):
 def normalize_plaintext(plaintext, plaintext_field):
     return bytes([plaintext_field.index(v) for v in plaintext])
 
-def cipher_multiple(plaintexts, scheduler_fn):
+def cipher_multiple(plaintexts, scheduler_fn, variation=1):
     # convert to bytes for ease of use
     plaintexts = [bytes(p, "ascii") for p in plaintexts]
     # generate the field shared betweenall the plaintexts
@@ -29,10 +29,10 @@ def cipher_multiple(plaintexts, scheduler_fn):
     # normalize all the plaintexts
     plaintexts = [normalize_plaintext(p, plaintext_field) for p in plaintexts]
     # encrypt each message
-    return [cipher(p, plaintext_field, scheduler_fn) for p in plaintexts]
+    return [cipher(p, plaintext_field, scheduler_fn, variation) for p in plaintexts]
 
 # plaintext is normalized to plaintext_field
-def cipher(plaintext, plaintext_field, scheduler_fn):
+def cipher(plaintext, plaintext_field, scheduler_fn, variation):
     # default previous value of 0
     # FIXME maybe it's 42 maybes it's 1337 who cares at this point TrollDespair
     previous_value = 0
@@ -42,7 +42,7 @@ def cipher(plaintext, plaintext_field, scheduler_fn):
     scheduler.init_scheduler()
     for i, v in enumerate(plaintext):
         field = autokeyer(cipher_field, previous_value)
-        field = scheduler_fn(field, len(plaintext_field), i)
+        field = scheduler_fn(field, len(plaintext_field), i, variation)
         previous_value = field[v]
         result.append(previous_value)
 
@@ -52,13 +52,14 @@ def cipher(plaintext, plaintext_field, scheduler_fn):
 
 from plaintexts import plaintexts, plaintexts_lower, plaintexts_no_space
 
-ciphertexts = cipher_multiple(plaintexts, scheduler.ring)
-ciphertexts_lower = cipher_multiple(plaintexts_lower, scheduler.ring)
-ciphertexts_no_space = cipher_multiple(plaintexts_no_space, scheduler.ring)
-
+ciphertexts = cipher_multiple(plaintexts, scheduler.multi_ring, 5)
 for i, c in enumerate(ciphertexts):
     print(c.decode())
+
+# ciphertexts_lower = cipher_multiple(plaintexts_lower, scheduler.multi_ring)
 # for i, c in enumerate(ciphertexts_lower):
 #     print(c.decode())
+
+# ciphertexts_no_space = cipher_multiple(plaintexts_no_space, scheduler.multi_ring)
 # for i, c in enumerate(ciphertexts_no_space):
 #     print(c.decode())

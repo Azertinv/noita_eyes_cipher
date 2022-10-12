@@ -25,7 +25,6 @@ plaintexts = [
     "Secrets of rebuilding have been unlocked to you.",
     "This secret should not have been available for you.",
     "Secrets of great undoing have been unlocked to you.",
-
 ]
 
 plaintexts_lower = [p.lower() for p in plaintexts]
