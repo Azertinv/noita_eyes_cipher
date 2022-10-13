@@ -2,7 +2,7 @@
 
 import sys
 
-ciphers = sys.stdin.readlines()
+ciphers = sys.stdin.read().splitlines()
 
 def window(l, size):
     for i in range(len(l)-size):
@@ -26,8 +26,8 @@ for c in ciphers:
         else:
             result += " "
             i += 1
+    print(result)
+    print(c)
     if len(repeat_index) > 0:
-        print(result)
-        print(c)
         total_repeats += len(repeat_index) // 2
-print(total_repeats)
+# print(total_repeats)

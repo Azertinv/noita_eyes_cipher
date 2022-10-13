@@ -2,7 +2,7 @@
 
 import sys
 
-ciphers = sys.stdin.readlines()
+ciphers = sys.stdin.read().splitlines()
 
 isomorph_count = {}
 

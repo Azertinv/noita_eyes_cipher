@@ -1,22 +1,31 @@
 #!/usr/bin/python3
 
-from random import sample, shuffle
+import random
 from IPython import embed
 
 import scheduler
 
-# cipher field
-# FIXME it is currently sorted, maybe it's not ?
-cipher_field = bytes(range(83))
+# scrambled cipher field
+cipher_field = list(range(83))
+random.seed(42)
+random.shuffle(cipher_field)
+cipher_field = bytes(cipher_field)
 
 def autokeyer(field, value):
     field = list(field)
     field.remove(value)
     return bytes(field)
 
+
 # takes an array of plaintexts and return the field that's shared between all of them
 def get_plaintext_field(plaintexts):
-    return bytes(set(b"".join(plaintexts)))
+    field = list(set(b"".join(plaintexts)))
+    # is the plaintext field scrambled ?
+    # random.seed(11111)
+    # random.shuffle(field)
+    # or sorted ?
+    field.sort()
+    return bytes(field)
 
 def normalize_plaintext(plaintext, plaintext_field):
     return bytes([plaintext_field.index(v) for v in plaintext])
@@ -52,7 +61,7 @@ def cipher(plaintext, plaintext_field, scheduler_fn, variation):
 
 from plaintexts import plaintexts, plaintexts_lower, plaintexts_no_space
 
-ciphertexts = cipher_multiple(plaintexts, scheduler.multi_ring, 5)
+ciphertexts = cipher_multiple(plaintexts, scheduler.multi_ring, 42)
 for i, c in enumerate(ciphertexts):
     print(c.decode())
 
