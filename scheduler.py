@@ -22,9 +22,9 @@ def ring(field, k, index, _):
 def multi_ring(field, k, index, variation):
     return rotate(field, index*variation)[:k]
 
-# doesn't exhibit shared isomorphs
-def primitive_root(field, k, index, _):
-    return rotate(field, (2**index) % 83)[:k]
+# TODO
+def primitive_root(field, k, index, variation):
+    return rotate(field, (variation**index) % 83)[:k]
 
 # doesn't exhibit shared isomorphs
 def random_shuffled(field, k, index, _):
